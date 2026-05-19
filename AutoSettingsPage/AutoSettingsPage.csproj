@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FluentIcons.Common" Version="2.1.325" />
+		<PackageReference Include="FluentIcons.Common" Version="$(FluentIconsVersion)" />
 	</ItemGroup>
 
 </Project>
