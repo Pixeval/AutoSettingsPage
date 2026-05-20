@@ -1,4 +1,4 @@
-<controls:SettingsCard
+﻿<controls:SettingsCard
     x:Class="AutoSettingsPage.Avalonia.ClickableSettingsCard"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -8,14 +8,14 @@
     xmlns:fluent="using:FluentIcons.Avalonia"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:AutoSettingsPage.Models"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
     x:DataType="{x:Type models:ClickableSettingsEntry}"
     Click="Clicked"
     Description="{Binding Converter={x:Static avalonia:SettingsEntryHelper.DescriptionConverter}}"
     Header="{Binding Header}"
     IsClickEnabled="True"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    d:DesignHeight="450"
+    d:DesignWidth="800">
     <controls:SettingsCard.ActionIcon>
         <fluent:SymbolIcon Symbol="{Binding ActionIcon}" />
     </controls:SettingsCard.ActionIcon>
