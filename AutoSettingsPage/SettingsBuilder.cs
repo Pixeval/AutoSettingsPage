@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Numerics;
 using AutoSettingsPage.Models;
@@ -222,32 +223,45 @@ public static class SettingsBuilder
 
         private readonly List<SimpleSettingsGroup> _groups = [];
 
-        private SimpleSettingsGroup? _currentGroup;
-
         internal SettingsGroupListBuilderImpl(TSettings settings) => Settings = settings;
 
         /// <inheritdoc />
-        public ISettingsGroupListBuilder<TSettings> NewGroup(string header,
+        public ISettingsGroupListBuilder<TSettings> NewGroup(
+            string header,
             string description = "",
             Symbol icon = default,
             Uri? descriptionUri = null,
             string? token = null,
+            Action<ISettingsGroupBuilder<TSettings>> configEntries = null!,
             Action<ISettingsGroup>? config = null)
         {
-            _currentGroup = new SimpleSettingsGroup(token ?? header, header, description, icon, descriptionUri);
-            config?.Invoke(_currentGroup);
-            _groups.Add(_currentGroup);
+            ArgumentNullException.ThrowIfNull(configEntries, $"Argument {nameof(configEntries)} should be assigned.");
+
+            var currentGroup = new SimpleSettingsGroup(token ?? header, header, description, icon, descriptionUri);
+            config?.Invoke(currentGroup);
+            _groups.Add(currentGroup);
+
+            var groupBuilder = CreateGroup(Settings);
+            configEntries(groupBuilder);
+            currentGroup.AddRange(groupBuilder.Build());
             return this;
         }
 
         /// <inheritdoc />
-        public ISettingsGroupListBuilder<TSettings> Config(Action<ISettingsGroupBuilder<TSettings>> config)
+        public ISettingsGroupListBuilder<TSettings> NewGroup<TGroup>(
+            Expression<Func<TSettings, TGroup>> property,
+            Action<ISettingsGroupBuilder<TGroup>> configEntries,
+            Action<ISettingsGroup>? config = null)
         {
-            if (_currentGroup is null)
-                throw new InvalidOperationException("No group has been added to configure.");
-            var groupBuilder = CreateGroup(Settings);
-            config(groupBuilder);
-            _currentGroup.AddRange(groupBuilder.Build());
+            var currentGroup = new SimpleSettingsGroup(property);
+            config?.Invoke(currentGroup);
+            _groups.Add(currentGroup);
+
+            var groupSettings = property.Compile()(Settings)
+                ?? throw new InvalidOperationException("The settings group property returned null.");
+            var groupBuilder = CreateGroup(groupSettings);
+            configEntries(groupBuilder);
+            currentGroup.AddRange(groupBuilder.Build());
             return this;
         }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 using AutoSettingsPage.Models;
 using Microsoft.UI.Xaml;
@@ -33,35 +34,41 @@ public static class SettingsEntryHelper
 
     public static FrameworkElement GetControl(ISettingsEntry entry) => FactoryDictionary[entry.GetType()](entry);
 
-    public static Dictionary<Type, Func<ISettingsEntry, FrameworkElement>> FactoryDictionary { get; } = new();
+    public static SettingsEntryControlFactoryDictionary<FrameworkElement> FactoryDictionary { get; } = new();
 
-
-    extension(Dictionary<Type, Func<ISettingsEntry, FrameworkElement>> dictionary)
+    extension(SettingsEntryControlFactoryDictionary<FrameworkElement> dictionary)
     {
-        public Dictionary<Type, Func<ISettingsEntry, FrameworkElement>> Add<TEntry, TControl>()
+        public SettingsEntryControlFactoryDictionary<FrameworkElement> Add<TEntry, TControl>()
             where TEntry : ISettingsEntry
-            where TControl : FrameworkElement, IEntryControl<TEntry>, new()
-        {
-            dictionary[typeof(TEntry)] = entry => new TControl { Entry = (TEntry) entry };
-            return dictionary;
-        }
+            where TControl : FrameworkElement, IEntryControl<TEntry>, new() =>
+            dictionary.Add<TEntry>(static entry => new TControl { Entry = entry });
 
-        public Dictionary<Type, Func<ISettingsEntry, FrameworkElement>> AddPredefined<TSettings>()
-        {
-            return dictionary
+        public SettingsEntryControlFactoryDictionary<FrameworkElement> AddAssignable<TEntry, TControl>()
+            where TEntry : ISettingsEntry
+            where TControl : FrameworkElement, IEntryControl<TEntry>, new() =>
+            dictionary.AddAssignable<TEntry>(static entry => new TControl { Entry = entry });
+
+        public SettingsEntryControlFactoryDictionary<FrameworkElement> AddOpenGeneric<TEntry, TControl>(
+            Type openGenericEntryType)
+            where TEntry : ISettingsEntry
+            where TControl : FrameworkElement, IEntryControl<TEntry>, new() =>
+            dictionary.AddOpenGeneric(openGenericEntryType, static entry => new TControl { Entry = (TEntry) entry });
+
+
+        public SettingsEntryControlFactoryDictionary<FrameworkElement> AddPredefined() =>
+            dictionary
                 .Add<ClickableSettingsEntry, ClickableSettingsCard>()
-                .Add<StringSettingsEntry<TSettings>, StringSettingsCard>()
-                .Add<DoubleSettingsEntry<TSettings>, DoubleSettingsCard>()
-                .Add<IntSettingsEntry<TSettings>, DoubleSettingsCard>()
-                .Add<BoolSettingsEntry<TSettings>, BoolSettingsCard>()
-                .Add<EnumSettingsEntry<TSettings, object>, EnumSettingsCard>()
-                .Add<DateTimeOffsetSettingsEntry<TSettings>, DateSettingsCard>()
-                .Add<FontSettingsEntry<TSettings>, FontSettingsCard>()
-                .Add<CollectionSettingsEntry<TSettings, string>, TokenizingSettingsExpander>()
-                .Add<ColorSettingsEntry<TSettings>, ColorSettingsCard>()
-                .Add<MultiValuesEntry<TSettings>, MultiValuesSettingsExpander>()
-                .Add<MultiValuesWithSwitchEntry<TSettings>, MultiValuesWithSwitchSettingsExpander>();
-        }
+                .AddOpenGeneric<ISingleValueSettingsEntry<string>, FontSettingsCard>(typeof(FontSettingsEntry<>))
+                .AddOpenGeneric<ISingleValueSettingsEntry<ObservableCollection<string>>, TokenizingSettingsExpander>(typeof(CollectionSettingsEntry<,>))
+                .AddOpenGeneric<ISingleValueSettingsEntry<uint>, ColorSettingsCard>(typeof(ColorSettingsEntry<>))
+                .AddAssignable<IMultiValuesWithSwitchSettingsEntry, MultiValuesWithSwitchSettingsExpander>()
+                .AddAssignable<IMultiValuesSettingsEntry, MultiValuesSettingsExpander>()
+                .AddAssignable<IEnumSettingsEntry<object>, EnumSettingsCard>()
+                .AddAssignable<INumberSettingsEntry<double>, DoubleSettingsCard>()
+                .AddAssignable<INumberSettingsEntry<int>, DoubleSettingsCard>()
+                .AddAssignable<ISingleValueSettingsEntry<string>, StringSettingsCard>()
+                .AddAssignable<ISingleValueSettingsEntry<bool>, BoolSettingsCard>()
+                .AddAssignable<ISingleValueSettingsEntry<DateTimeOffset>, DateSettingsCard>();
     }
 
     extension<TSettings>(ISettingsGroupBuilder<TSettings> builder)

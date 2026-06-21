@@ -1,9 +1,10 @@
+using System.Linq.Expressions;
 using AutoSettingsPage.Models;
 using FluentIcons.Common;
 
 namespace AutoSettingsPage;
 
-public interface ISettingsGroupListBuilder<out TSettings>
+public interface ISettingsGroupListBuilder<TSettings>
 {
     TSettings Settings { get; }
 
@@ -13,9 +14,13 @@ public interface ISettingsGroupListBuilder<out TSettings>
         Symbol icon = default,
         Uri? descriptionUri = null,
         string? token = null,
+        Action<ISettingsGroupBuilder<TSettings>> configEntries = null!,
         Action<ISettingsGroup>? config = null);
 
-    ISettingsGroupListBuilder<TSettings> Config(Action<ISettingsGroupBuilder<TSettings>> config);
+    ISettingsGroupListBuilder<TSettings> NewGroup<TGroup>(
+        Expression<Func<TSettings, TGroup>> property,
+        Action<ISettingsGroupBuilder<TGroup>> configEntries,
+        Action<ISettingsGroup>? config = null);
 
     IReadOnlyList<ISettingsGroup> Build();
 }

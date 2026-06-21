@@ -8,10 +8,11 @@ public abstract class SettingsEntryBase(
     string token,
     string header,
     string description,
-    Symbol icon) : ISettingsEntry
+    Symbol icon,
+    Uri? descriptionUri = null) : ISettingsEntry
 {
     protected SettingsEntryBase(string token, SettingsEntryAttribute attribute)
-        : this(token, attribute.Header, attribute.Description, attribute.Icon)
+        : this(token, attribute.Header, attribute.Description, attribute.Icon, attribute.DescriptionUri)
     {
     }
 
@@ -31,7 +32,7 @@ public abstract class SettingsEntryBase(
 
     public Symbol Icon { get; set; } = icon;
 
-    public virtual Uri? DescriptionUri { get; set; }
+    public virtual Uri? DescriptionUri { get; set; } = descriptionUri;
 
     private protected static string GetMemberAttribute(LambdaExpression propertyExpression, out MemberExpression member, out SettingsEntryAttribute attribute)
     {
