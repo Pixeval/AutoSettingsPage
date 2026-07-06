@@ -11,22 +11,15 @@ namespace CommunityToolkit.Avalonia.Controls;
 /// <summary>
 /// The SettingsExpander is a collapsible control to host multiple SettingsCards.
 /// </summary>
-public class SettingsExpander : ContentControl
+public class SettingsExpander : Expander
 {
-    /// <inheritdoc />
     protected override Type StyleKeyOverride => typeof(SettingsExpander);
-
-    public static readonly StyledProperty<object?> HeaderProperty =
-        AvaloniaProperty.Register<SettingsExpander, object?>(nameof(Header));
 
     public static readonly StyledProperty<object?> DescriptionProperty =
         AvaloniaProperty.Register<SettingsExpander, object?>(nameof(Description));
 
     public static readonly StyledProperty<object?> HeaderIconProperty =
         AvaloniaProperty.Register<SettingsExpander, object?>(nameof(HeaderIcon));
-
-    public static readonly StyledProperty<bool> IsExpandedProperty =
-        AvaloniaProperty.Register<SettingsExpander, bool>(nameof(IsExpanded));
 
     public static readonly StyledProperty<Control?> ItemsHeaderProperty =
         AvaloniaProperty.Register<SettingsExpander, Control?>(nameof(ItemsHeader));
@@ -39,15 +32,6 @@ public class SettingsExpander : ContentControl
 
     public static readonly StyledProperty<IDataTemplate?> ItemTemplateProperty =
         AvaloniaProperty.Register<SettingsExpander, IDataTemplate?>(nameof(ItemTemplate));
-
-    /// <summary>
-    /// Gets or sets the Header.
-    /// </summary>
-    public object? Header
-    {
-        get => GetValue(HeaderProperty);
-        set => SetValue(HeaderProperty, value);
-    }
 
     /// <summary>
     /// Gets or sets the Description.
@@ -65,15 +49,6 @@ public class SettingsExpander : ContentControl
     {
         get => GetValue(HeaderIconProperty);
         set => SetValue(HeaderIconProperty, value);
-    }
-
-    /// <summary>
-    /// Gets or sets the IsExpanded state.
-    /// </summary>
-    public bool IsExpanded
-    {
-        get => GetValue(IsExpandedProperty);
-        set => SetValue(IsExpandedProperty, value);
     }
 
     /// <summary>
@@ -117,31 +92,13 @@ public class SettingsExpander : ContentControl
     /// </summary>
     public IList<object> Items { get; set; } = new List<object>();
 
-    /// <summary>
-    /// Fires when the SettingsExpander is opened.
-    /// </summary>
-    public event EventHandler? Expanded;
-
-    /// <summary>
-    /// Fires when the expander is closed.
-    /// </summary>
-    public event EventHandler? Collapsed;
-
     private ItemsControl? _itemsControl;
 
     /// <inheritdoc />
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
-        if (e.Property == IsExpandedProperty)
-        {
-            var newValue = e.GetNewValue<bool>();
-            if (newValue)
-                Expanded?.Invoke(this, EventArgs.Empty);
-            else
-                Collapsed?.Invoke(this, EventArgs.Empty);
-        }
-        else if (e.Property == ItemsSourceProperty)
+        if (e.Property == ItemsSourceProperty)
         {
             UpdateItemsSource();
         }
