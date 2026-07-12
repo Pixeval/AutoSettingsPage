@@ -1,7 +1,8 @@
 <ResourceDictionary
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:CommunityToolkit.Avalonia.Controls">
+    xmlns:controls="using:CommunityToolkit.Avalonia.Controls"
+    xmlns:converters="using:CommunityToolkit.Avalonia.Controls.Converters">
 
     <Design.PreviewWith>
         <controls:SettingsCard
@@ -9,6 +10,11 @@
             Description="Test Description"
             Header="Test Header" />
     </Design.PreviewWith>
+
+    <x:Double x:Key="SettingsCardWrapThreshold">476</x:Double>
+    <converters:DoubleLessThanOrEqualConverter
+        x:Key="SettingsCardWrapThresholdConverter"
+        Threshold="{StaticResource SettingsCardWrapThreshold}" />
 
     <ControlTheme x:Key="{x:Type controls:SettingsCard}" TargetType="{x:Type controls:SettingsCard}">
         <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefaultBrush}" />
@@ -38,6 +44,9 @@
                     CornerRadius="{TemplateBinding CornerRadius}">
                     <Grid
                         x:Name="PART_RootGrid"
+                        Classes.wrapped="{Binding Bounds.Width,
+                                                  RelativeSource={RelativeSource Self},
+                                                  Converter={StaticResource SettingsCardWrapThresholdConverter}}"
                         ColumnDefinitions="Auto,*,Auto,Auto"
                         RowDefinitions="*,Auto">
 
@@ -97,8 +106,10 @@
                             VerticalAlignment="Center">
                             <Viewbox.IsVisible>
                                 <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                    <TemplateBinding Converter="{x:Static controls:SettingsCard.ToBoolean}" Property="IsActionIconVisible" />
-                                    <TemplateBinding Converter="{x:Static controls:SettingsCard.ToBoolean}" Property="IsClickEnabled" />
+                                    <TemplateBinding Converter="{x:Static controls:SettingsCard.ToBoolean}"
+                                                     Property="IsActionIconVisible" />
+                                    <TemplateBinding Converter="{x:Static controls:SettingsCard.ToBoolean}"
+                                                     Property="IsClickEnabled" />
                                 </MultiBinding>
                             </Viewbox.IsVisible>
                             <ContentPresenter
@@ -156,6 +167,17 @@
             <Setter Property="Foreground" Value="{DynamicResource TextFillColorDisabledBrush}" />
         </Style>
 
+        <!--  Wrap content below the header at the same threshold as the WinUI SettingsCard.  -->
+        <Style Selector="^ /template/ Grid#PART_RootGrid.wrapped StackPanel#HeaderPanel">
+            <Setter Property="Margin" Value="0" />
+        </Style>
+        <Style Selector="^ /template/ Grid#PART_RootGrid.wrapped ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="1" />
+            <Setter Property="Margin" Value="0,8,0,0" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
         <!--  Left alignment: hide header/description/icon, content on left  -->
         <Style Selector="^:left /template/ Viewbox#PART_HeaderIconPresenterHolder">
             <Setter Property="IsVisible" Value="False" />
@@ -169,13 +191,18 @@
         <Style Selector="^:left /template/ ContentPresenter#PART_ContentPresenter">
             <Setter Property="Grid.Row" Value="1" />
             <Setter Property="Grid.Column" Value="1" />
+            <Setter Property="Margin" Value="0" />
             <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+        <Style Selector="^:left /template/ Grid#PART_RootGrid.wrapped ContentPresenter#PART_ContentPresenter">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
         </Style>
 
         <!--  Vertical alignment  -->
         <Style Selector="^:vertical /template/ ContentPresenter#PART_ContentPresenter">
             <Setter Property="Grid.Row" Value="1" />
             <Setter Property="Grid.Column" Value="1" />
+            <Setter Property="Margin" Value="0" />
             <Setter Property="HorizontalAlignment" Value="Stretch" />
         </Style>
 
