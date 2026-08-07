@@ -28,6 +28,7 @@
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0" />
         <Setter Property="Template">
             <ControlTemplate TargetType="{x:Type controls:SettingsCard}">
                 <Border
@@ -41,7 +42,8 @@
                     Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
-                    CornerRadius="{TemplateBinding CornerRadius}">
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    Margin="{TemplateBinding Margin}">
                     <Grid
                         x:Name="PART_RootGrid"
                         Classes.wrapped="{Binding Bounds.Width,

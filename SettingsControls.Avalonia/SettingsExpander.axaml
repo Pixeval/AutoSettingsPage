@@ -232,10 +232,11 @@
                                         <ItemsControl
                                             x:Name="PART_ItemsControl"
                                             Grid.Row="1"
-                                            ItemTemplate="{TemplateBinding ItemTemplate}">
+                                            ItemTemplate="{TemplateBinding ItemTemplate}" 
+                                            Padding="8">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
-                                                    <StackPanel Orientation="Vertical" />
+                                                    <StackPanel Orientation="Vertical" Spacing="{DynamicResource SettingsExpanderSpacing}"/>
                                                 </ItemsPanelTemplate>
                                             </ItemsControl.ItemsPanel>
                                         </ItemsControl>
