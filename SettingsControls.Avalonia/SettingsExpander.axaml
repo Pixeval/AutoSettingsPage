@@ -2,7 +2,8 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:CommunityToolkit.Avalonia.Controls"
-    xmlns:converters="using:CommunityToolkit.Avalonia.Controls.Converters">
+    xmlns:converters="using:CommunityToolkit.Avalonia.Controls.Converters"
+    xmlns:fluent="using:FluentIcons.Avalonia">
 
     <Design.PreviewWith>
         <controls:SettingsExpander
@@ -61,37 +62,33 @@
                             Content="{TemplateBinding Content}"
                             ContentTemplate="{TemplateBinding ContentTemplate}"
                             Foreground="{TemplateBinding Foreground}" />
-                        <Border
-                            x:Name="ExpandCollapseChevronBorder"
+                        <Viewbox
                             Grid.Column="1"
-                            Width="{DynamicResource SettingsExpanderChevronButtonSize}"
-                            Height="{DynamicResource SettingsExpanderChevronButtonSize}"
-                            Margin="{DynamicResource SettingsExpanderChevronMargin}"
-                            Background="Transparent"
-                            BorderBrush="Transparent"
-                            BorderThickness="0"
-                            CornerRadius="{DynamicResource ControlCornerRadius}">
-                            <Path
+                            MaxWidth="{DynamicResource SettingsControlIconSize}"
+                            MaxHeight="{DynamicResource SettingsControlIconSize}"
+                            Margin="{DynamicResource SettingsExpanderIconMargin}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                            <fluent:SymbolIcon
                                 x:Name="ExpandCollapseChevron"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                RenderTransformOrigin="50%,50%"
-                                Stretch="None"
-                                Stroke="{DynamicResource TextFillColorSecondaryBrush}"
-                                StrokeThickness="1">
-                                <Path.RenderTransform>
+                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                RenderTransformOrigin="50%,50%">
+                                <fluent:SymbolIcon.RenderTransform>
                                     <RotateTransform />
-                                </Path.RenderTransform>
-                            </Path>
-                        </Border>
+                                </fluent:SymbolIcon.RenderTransform>
+                            </fluent:SymbolIcon>
+                        </Viewbox>
                     </Grid>
                 </Border>
             </ControlTemplate>
         </Setter>
 
-        <Style Selector="^[Tag=expanded] /template/ Path#ExpandCollapseChevron">
+        <Style Selector="^[Tag=expanded] /template/ fluent|SymbolIcon#ExpandCollapseChevron">
             <Style.Animations>
-                <Animation FillMode="Both" Duration="0:0:0.0625">
+                <Animation FillMode="Both" Duration="0:0:0.1">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="RotateTransform.Angle" Value="0" />
+                    </KeyFrame>
                     <KeyFrame Cue="100%">
                         <Setter Property="RotateTransform.Angle" Value="180" />
                     </KeyFrame>
@@ -99,9 +96,9 @@
             </Style.Animations>
         </Style>
 
-        <Style Selector="^[Tag=collapsed] /template/ Path#ExpandCollapseChevron">
+        <Style Selector="^[Tag=collapsed] /template/ fluent|SymbolIcon#ExpandCollapseChevron">
             <Style.Animations>
-                <Animation FillMode="Both" Duration="0:0:0.0625">
+                <Animation FillMode="Both" Duration="0:0:0.1">
                     <KeyFrame Cue="0%">
                         <Setter Property="RotateTransform.Angle" Value="180" />
                     </KeyFrame>
@@ -115,17 +112,17 @@
         <Style Selector="^:pointerover /template/ Border#ToggleButtonBackground">
             <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
         </Style>
-        <Style Selector="^:pointerover /template/ Path#ExpandCollapseChevron">
-            <Setter Property="Stroke" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        <Style Selector="^:pointerover /template/ fluent|SymbolIcon#ExpandCollapseChevron">
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
         </Style>
         <Style Selector="^:pressed /template/ Border#ToggleButtonBackground">
             <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}" />
         </Style>
-        <Style Selector="^:pressed /template/ Path#ExpandCollapseChevron">
-            <Setter Property="Stroke" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+        <Style Selector="^:pressed /template/ fluent|SymbolIcon#ExpandCollapseChevron">
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
         </Style>
-        <Style Selector="^:disabled /template/ Path#ExpandCollapseChevron">
-            <Setter Property="Stroke" Value="{DynamicResource TextFillColorDisabledBrush}" />
+        <Style Selector="^:disabled /template/ fluent|SymbolIcon#ExpandCollapseChevron">
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorDisabledBrush}" />
         </Style>
     </ControlTheme>
 
@@ -133,8 +130,8 @@
         x:Key="SettingsExpanderToggleButtonUpTheme"
         BasedOn="{StaticResource SettingsExpanderToggleButtonTheme}"
         TargetType="{x:Type ToggleButton}">
-        <Style Selector="^ /template/ Path#ExpandCollapseChevron">
-            <Setter Property="Data" Value="M 0 7 L 7 0 L 14 7" />
+        <Style Selector="^ /template/ fluent|SymbolIcon#ExpandCollapseChevron">
+            <Setter Property="Symbol" Value="ChevronUp" />
         </Style>
     </ControlTheme>
 
@@ -142,8 +139,8 @@
         x:Key="SettingsExpanderToggleButtonDownTheme"
         BasedOn="{StaticResource SettingsExpanderToggleButtonTheme}"
         TargetType="{x:Type ToggleButton}">
-        <Style Selector="^ /template/ Path#ExpandCollapseChevron">
-            <Setter Property="Data" Value="M 0 0 L 7 7 L 14 0" />
+        <Style Selector="^ /template/ fluent|SymbolIcon#ExpandCollapseChevron">
+            <Setter Property="Symbol" Value="ChevronDown" />
         </Style>
     </ControlTheme>
 
@@ -151,8 +148,8 @@
         x:Key="SettingsExpanderToggleButtonLeftTheme"
         BasedOn="{StaticResource SettingsExpanderToggleButtonTheme}"
         TargetType="{x:Type ToggleButton}">
-        <Style Selector="^ /template/ Path#ExpandCollapseChevron">
-            <Setter Property="Data" Value="M 7 0 L 0 7 L 7 14" />
+        <Style Selector="^ /template/ fluent|SymbolIcon#ExpandCollapseChevron">
+            <Setter Property="Symbol" Value="ChevronLeft" />
         </Style>
     </ControlTheme>
 
@@ -160,8 +157,8 @@
         x:Key="SettingsExpanderToggleButtonRightTheme"
         BasedOn="{StaticResource SettingsExpanderToggleButtonTheme}"
         TargetType="{x:Type ToggleButton}">
-        <Style Selector="^ /template/ Path#ExpandCollapseChevron">
-            <Setter Property="Data" Value="M 0 0 L 7 7 L 0 14" />
+        <Style Selector="^ /template/ fluent|SymbolIcon#ExpandCollapseChevron">
+            <Setter Property="Symbol" Value="ChevronRight" />
         </Style>
     </ControlTheme>
 

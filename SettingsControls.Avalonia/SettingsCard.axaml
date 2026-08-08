@@ -12,9 +12,7 @@
     </Design.PreviewWith>
 
     <x:Double x:Key="SettingsCardWrapThreshold">476</x:Double>
-    <converters:DoubleLessThanOrEqualConverter
-        x:Key="SettingsCardWrapThresholdConverter"
-        Threshold="{StaticResource SettingsCardWrapThreshold}" />
+    <converters:DoubleLessThanOrEqualConverter x:Key="SettingsCardWrapThresholdConverter" Threshold="{StaticResource SettingsCardWrapThreshold}" />
 
     <ControlTheme x:Key="{x:Type controls:SettingsCard}" TargetType="{x:Type controls:SettingsCard}">
         <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefaultBrush}" />
@@ -36,19 +34,17 @@
                     MinWidth="{TemplateBinding MinWidth}"
                     MinHeight="{TemplateBinding MinHeight}"
                     MaxWidth="{TemplateBinding MaxWidth}"
+                    Margin="{TemplateBinding Margin}"
                     Padding="{TemplateBinding Padding}"
                     HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                     VerticalAlignment="{TemplateBinding VerticalAlignment}"
                     Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
-                    CornerRadius="{TemplateBinding CornerRadius}"
-                    Margin="{TemplateBinding Margin}">
+                    CornerRadius="{TemplateBinding CornerRadius}">
                     <Grid
                         x:Name="PART_RootGrid"
-                        Classes.wrapped="{Binding Bounds.Width,
-                                                  RelativeSource={RelativeSource Self},
-                                                  Converter={StaticResource SettingsCardWrapThresholdConverter}}"
+                        Classes.wrapped="{Binding Bounds.Width, RelativeSource={RelativeSource Self}, Converter={StaticResource SettingsCardWrapThresholdConverter}}"
                         ColumnDefinitions="Auto,*,Auto,Auto"
                         RowDefinitions="*,Auto">
 
@@ -65,6 +61,7 @@
 
                         <StackPanel
                             x:Name="HeaderPanel"
+                            Grid.Row="0"
                             Grid.Column="1"
                             Margin="0,0,24,0"
                             VerticalAlignment="Center"
@@ -89,6 +86,7 @@
 
                         <ContentPresenter
                             x:Name="PART_ContentPresenter"
+                            Grid.Row="0"
                             Grid.Column="2"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
@@ -99,19 +97,18 @@
 
                         <Viewbox
                             x:Name="PART_ActionIconPresenterHolder"
+                            Grid.Row="0"
                             Grid.RowSpan="2"
                             Grid.Column="3"
-                            MaxWidth="13"
-                            MaxHeight="13"
+                            MaxWidth="{DynamicResource SettingsControlIconSize}"
+                            MaxHeight="{DynamicResource SettingsControlIconSize}"
                             Margin="14,0,0,0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center">
                             <Viewbox.IsVisible>
                                 <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                    <TemplateBinding Converter="{x:Static controls:SettingsCard.ToBoolean}"
-                                                     Property="IsActionIconVisible" />
-                                    <TemplateBinding Converter="{x:Static controls:SettingsCard.ToBoolean}"
-                                                     Property="IsClickEnabled" />
+                                    <TemplateBinding Property="IsActionIconVisible" />
+                                    <TemplateBinding Property="IsClickEnabled" />
                                 </MultiBinding>
                             </Viewbox.IsVisible>
                             <ContentPresenter
