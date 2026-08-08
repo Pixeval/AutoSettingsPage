@@ -232,11 +232,11 @@
                                         <ItemsControl
                                             x:Name="PART_ItemsControl"
                                             Grid.Row="1"
-                                            ItemTemplate="{TemplateBinding ItemTemplate}" 
-                                            Padding="8">
+                                            Padding="4,2,4,4"
+                                            ItemTemplate="{TemplateBinding ItemTemplate}">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
-                                                    <StackPanel Orientation="Vertical" Spacing="{DynamicResource SettingsExpanderSpacing}"/>
+                                                    <StackPanel Orientation="Vertical" Spacing="{StaticResource SettingsExpanderSpacing}" />
                                                 </ItemsPanelTemplate>
                                             </ItemsControl.ItemsPanel>
                                         </ItemsControl>
@@ -267,20 +267,16 @@
             <Setter Property="Tag" Value="collapsed" />
         </Style>
         <Style Selector="^:expanded:up /template/ ToggleButton#ExpanderHeader">
-            <Setter Property="CornerRadius"
-                    Value="{TemplateBinding CornerRadius, Converter={StaticResource SettingsBottomCornerRadiusFilterConverter}}" />
+            <Setter Property="CornerRadius" Value="{TemplateBinding CornerRadius, Converter={StaticResource SettingsBottomCornerRadiusFilterConverter}}" />
         </Style>
         <Style Selector="^:expanded:down /template/ ToggleButton#ExpanderHeader">
-            <Setter Property="CornerRadius"
-                    Value="{TemplateBinding CornerRadius, Converter={StaticResource SettingsTopCornerRadiusFilterConverter}}" />
+            <Setter Property="CornerRadius" Value="{TemplateBinding CornerRadius, Converter={StaticResource SettingsTopCornerRadiusFilterConverter}}" />
         </Style>
         <Style Selector="^:expanded:left /template/ ToggleButton#ExpanderHeader">
-            <Setter Property="CornerRadius"
-                    Value="{TemplateBinding CornerRadius, Converter={StaticResource SettingsRightCornerRadiusFilterConverter}}" />
+            <Setter Property="CornerRadius" Value="{TemplateBinding CornerRadius, Converter={StaticResource SettingsRightCornerRadiusFilterConverter}}" />
         </Style>
         <Style Selector="^:expanded:right /template/ ToggleButton#ExpanderHeader">
-            <Setter Property="CornerRadius"
-                    Value="{TemplateBinding CornerRadius, Converter={StaticResource SettingsLeftCornerRadiusFilterConverter}}" />
+            <Setter Property="CornerRadius" Value="{TemplateBinding CornerRadius, Converter={StaticResource SettingsLeftCornerRadiusFilterConverter}}" />
         </Style>
 
         <Style Selector="^:left /template/ ToggleButton#ExpanderHeader">
