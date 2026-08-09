@@ -1,12 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="AutoSettingsPage.Models.DoubleSettingsEntry&lt;TSettings&gt;" Collapsed="true">
-    <Position X="7.25" Y="6.25" Width="2.75" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Models\NumberSettingsEntry.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="AutoSettingsPage.Models.SingleValueSettingsEntry&lt;TSettings, TValue&gt;" Collapsed="true">
     <Position X="19.75" Y="3.5" Width="3.5" />
     <TypeIdentifier>
@@ -30,20 +23,6 @@
       <FileName>Models\SettingsEntryBase.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="AutoSettingsPage.Models.UIntSettingsEntry&lt;TSettings&gt;" Collapsed="true">
-    <Position X="4" Y="6.25" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Models\NumberSettingsEntry.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="AutoSettingsPage.Models.IntSettingsEntry&lt;TSettings&gt;" Collapsed="true">
-    <Position X="10.75" Y="6.25" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Models\NumberSettingsEntry.cs</FileName>
-    </TypeIdentifier>
   </Class>
   <Class Name="AutoSettingsPage.Models.BoolSettingsEntry&lt;TSettings&gt;" Collapsed="true">
     <Position X="19.75" Y="5" Width="2.75" />
@@ -110,14 +89,6 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAABAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
       <FileName>Models\NumberSettingsEntry.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="AutoSettingsPage.Models.MultiValuesWithSwitchEntry&lt;TSettings&gt;" Collapsed="true">
-    <Position X="19.5" Y="6.25" Width="3.25" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Models\MultiValuesWithSwitchEntry.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>

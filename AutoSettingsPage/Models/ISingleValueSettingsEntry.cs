@@ -48,4 +48,16 @@ public interface IMultiValuesSettingsEntry : ISettingsEntry
     IReadOnlyList<ISettingsEntry> Entries { get; }
 }
 
-public interface IMultiValuesWithSwitchSettingsEntry : IMultiValuesSettingsEntry, ISingleValueSettingsEntry<bool>;
+public interface IMultiValuesWithMainValueSettingsEntry : IMultiValuesSettingsEntry
+{
+    IReadOnlySingleValueSettingsEntry MainValue { get; }
+}
+
+public interface IMultiValuesWithMainValueSettingsEntry<out TMainValue> :
+    IMultiValuesWithMainValueSettingsEntry
+    where TMainValue : IReadOnlySingleValueSettingsEntry
+{
+    new TMainValue MainValue { get; }
+
+    IReadOnlySingleValueSettingsEntry IMultiValuesWithMainValueSettingsEntry.MainValue => MainValue;
+}

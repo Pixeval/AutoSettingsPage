@@ -14,5 +14,5 @@
     <controls:SettingsExpander.HeaderIcon>
         <fluent:SymbolIcon Symbol="{x:Bind Entry.Icon}" />
     </controls:SettingsExpander.HeaderIcon>
-    <ToggleSwitch IsOn="{x:Bind Entry.Value, Mode=TwoWay}" />
+    <ToggleSwitch IsOn="{x:Bind Entry.MainValue.Value, Mode=TwoWay}" />
 </controls:SettingsExpander>

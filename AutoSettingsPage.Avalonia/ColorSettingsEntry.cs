@@ -5,7 +5,7 @@ using FluentIcons.Common;
 
 namespace AutoSettingsPage.Avalonia;
 
-public class ColorSettingsEntry<TSettings> : UIntSettingsEntry<TSettings>, IColorSettingsEntry
+public class ColorSettingsEntry<TSettings> : NumberSettingsEntry<TSettings, uint>, IColorSettingsEntry
 {
     public ColorSettingsEntry(
         TSettings settings,

@@ -10,7 +10,8 @@ public class MultiValuesEntry<TSettings> : SettingsEntryBase, IMultiValuesSettin
         string header,
         string description,
         Symbol icon,
-        IReadOnlyList<ISettingsEntry> entries) : base(token, header, description, icon)
+        IReadOnlyList<ISettingsEntry> entries,
+        Uri? descriptionUri = null) : base(token, header, description, icon, descriptionUri)
     {
         Entries = entries;
     }

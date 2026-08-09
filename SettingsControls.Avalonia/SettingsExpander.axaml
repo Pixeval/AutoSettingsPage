@@ -206,6 +206,7 @@
                                     Background="Transparent"
                                     BorderThickness="0"
                                     Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
                                     CornerRadius="0"
                                     Description="{TemplateBinding Description}"
                                     FontFamily="{TemplateBinding FontFamily}"

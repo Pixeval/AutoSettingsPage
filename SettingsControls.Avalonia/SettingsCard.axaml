@@ -92,6 +92,7 @@
                             VerticalAlignment="Center"
                             HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                             Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
                             IsVisible="{TemplateBinding Content,
                                                         Converter={x:Static controls:SettingsCard.ToBoolean}}" />
 

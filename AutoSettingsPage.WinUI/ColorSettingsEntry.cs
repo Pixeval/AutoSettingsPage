@@ -5,7 +5,7 @@ using FluentIcons.Common;
 
 namespace AutoSettingsPage.WinUI;
 
-public partial class ColorSettingsEntry<TSettings> : UIntSettingsEntry<TSettings>
+public partial class ColorSettingsEntry<TSettings> : NumberSettingsEntry<TSettings, uint>
 {
     public ColorSettingsEntry(
         TSettings settings,

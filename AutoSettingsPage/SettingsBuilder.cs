@@ -64,35 +64,20 @@ public static class SettingsBuilder
         public ISettingsGroupBuilder<TSettings> Int(
             Expression<Func<TSettings, int>> property,
             int min, int max, int step,
-            Action<IntSettingsEntry<TSettings>>? config = null) =>
-            builder.Add(new(builder.Settings, property)
-            {
-                Min = min,
-                Max = max,
-                Step = step
-            }, config);
+            Action<NumberSettingsEntry<TSettings, int>>? config = null) =>
+            builder.Number(property, min, max, step, config);
 
         public ISettingsGroupBuilder<TSettings> Double(
             Expression<Func<TSettings, double>> property,
             double min, double max, double step,
-            Action<DoubleSettingsEntry<TSettings>>? config = null) =>
-            builder.Add(new(builder.Settings, property)
-            {
-                Min = min,
-                Max = max,
-                Step = step
-            }, config);
+            Action<NumberSettingsEntry<TSettings, double>>? config = null) =>
+            builder.Number(property, min, max, step, config);
 
         public ISettingsGroupBuilder<TSettings> UInt(
             Expression<Func<TSettings, uint>> property,
             uint min, uint max, uint step,
-            Action<UIntSettingsEntry<TSettings>>? config = null) =>
-            builder.Add(new(builder.Settings, property)
-            {
-                Min = min,
-                Max = max,
-                Step = step
-            }, config);
+            Action<NumberSettingsEntry<TSettings, uint>>? config = null) =>
+            builder.Number(property, min, max, step, config);
 
         public ISettingsGroupBuilder<TSettings> DateTimeOffset(
             Expression<Func<TSettings, DateTimeOffset>> property,
@@ -164,11 +149,25 @@ public static class SettingsBuilder
         public ISettingsGroupBuilder<TSettings> MultiValuesWithSwitch(
             Expression<Func<TSettings, bool>> property,
             Action<ISettingsGroupBuilder<TSettings>>? configValues,
-            Action<MultiValuesWithSwitchEntry<TSettings>>? config = null)
+            Action<MultiValuesWithMainValueEntry<TSettings, BoolSettingsEntry<TSettings>>>? config = null)
         {
             var simpleAddSettingsEntry = CreateGroup(builder.Settings);
             configValues?.Invoke(simpleAddSettingsEntry);
-            return builder.Add(new(builder.Settings, property, simpleAddSettingsEntry.Build()), config);
+            return builder.Add(new MultiValuesWithMainValueEntry<TSettings, BoolSettingsEntry<TSettings>>(
+                builder.Settings,
+                new BoolSettingsEntry<TSettings>(builder.Settings, property),
+                simpleAddSettingsEntry.Build()), config);
+        }
+
+        public ISettingsGroupBuilder<TSettings> MultiValuesWithMainValue<TMainValue>(
+            TMainValue mainValue,
+            Action<ISettingsGroupBuilder<TSettings>>? configValues,
+            Action<MultiValuesWithMainValueEntry<TSettings, TMainValue>>? config = null)
+            where TMainValue : IReadOnlySingleValueSettingsEntry
+        {
+            var simpleAddSettingsEntry = CreateGroup(builder.Settings);
+            configValues?.Invoke(simpleAddSettingsEntry);
+            return builder.Add(new MultiValuesWithMainValueEntry<TSettings, TMainValue>(builder.Settings, mainValue, simpleAddSettingsEntry.Build()), config);
         }
     }
 
@@ -257,7 +256,7 @@ public static class SettingsBuilder
             _groups.Add(currentGroup);
 
             var groupSettings = property.Compile()(Settings)
-                ?? throw new InvalidOperationException("The settings group property returned null.");
+                                ?? throw new InvalidOperationException("The settings group property returned null.");
             var groupBuilder = CreateGroup(groupSettings);
             configEntries(groupBuilder);
             currentGroup.AddRange(groupBuilder.Build());

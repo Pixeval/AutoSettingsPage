@@ -61,7 +61,7 @@ public static class SettingsEntryHelper
                 .AddOpenGeneric<ISingleValueSettingsEntry<string>, FontSettingsCard>(typeof(FontSettingsEntry<>))
                 .AddOpenGeneric<ISingleValueSettingsEntry<ObservableCollection<string>>, TokenizingSettingsExpander>(typeof(CollectionSettingsEntry<,>))
                 .AddOpenGeneric<ISingleValueSettingsEntry<uint>, ColorSettingsCard>(typeof(ColorSettingsEntry<>))
-                .AddAssignable<IMultiValuesWithSwitchSettingsEntry, MultiValuesWithSwitchSettingsExpander>()
+                .AddAssignable<IMultiValuesWithMainValueSettingsEntry<ISingleValueSettingsEntry<bool>>, MultiValuesWithSwitchSettingsExpander>()
                 .AddAssignable<IMultiValuesSettingsEntry, MultiValuesSettingsExpander>()
                 .AddAssignable<IEnumSettingsEntry<object>, EnumSettingsCard>()
                 .AddAssignable<INumberSettingsEntry<double>, DoubleSettingsCard>()

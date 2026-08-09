@@ -2,9 +2,9 @@ using AutoSettingsPage.Models;
 
 namespace AutoSettingsPage.WinUI;
 
-public sealed partial class MultiValuesWithSwitchSettingsExpander : IEntryControl<IMultiValuesWithSwitchSettingsEntry>
+public sealed partial class MultiValuesWithSwitchSettingsExpander : IEntryControl<IMultiValuesWithMainValueSettingsEntry<ISingleValueSettingsEntry<bool>>>
 {
-    public IMultiValuesWithSwitchSettingsEntry Entry
+    public IMultiValuesWithMainValueSettingsEntry<ISingleValueSettingsEntry<bool>> Entry
     {
         get;
         set
