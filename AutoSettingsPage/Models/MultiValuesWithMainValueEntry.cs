@@ -1,19 +1,17 @@
+using System.Linq.Expressions;
+
 namespace AutoSettingsPage.Models;
 
-public class MultiValuesWithMainValueEntry<TSettings, TMainValue>(
-    TSettings settings,
+public class MultiValuesWithMainValueEntry<TSettings, TSubSettings, TMainValue>(
+    TSubSettings settings,
+    Expression<Func<TSettings, TSubSettings>> subSettingsProperty,
     TMainValue mainValue,
     IReadOnlyList<ISettingsEntry> entries)
-    : MultiValuesEntry<TSettings>(mainValue.Token,
-            mainValue.Header,
-            mainValue.Description,
-            mainValue.Icon,
-            entries,
-            mainValue.DescriptionUri),
+    : MultiValuesEntry<TSettings, TSubSettings>(subSettingsProperty, entries),
         IMultiValuesWithMainValueSettingsEntry<TMainValue>
     where TMainValue : IReadOnlySingleValueSettingsEntry
 {
-    public TSettings Settings { get; } = settings;
+    public TSubSettings Settings { get; } = settings;
 
     public TMainValue MainValue { get; } = mainValue;
 }

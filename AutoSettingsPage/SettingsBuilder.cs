@@ -115,59 +115,41 @@ public static class SettingsBuilder
             Action<CollectionSettingsEntry<TSettings, TItem>>? config = null) =>
             builder.Add(new(builder.Settings, property), config);
 
-        public ISettingsGroupBuilder<TSettings> MultiValues(
-            Expression<Func<TSettings, object>> property,
-            Action<ISettingsGroupBuilder<TSettings>>? configValues,
-            Action<MultiValuesEntry<TSettings>>? config = null)
+        public ISettingsGroupBuilder<TSettings> MultiValues<TSubSettings>(
+            Expression<Func<TSettings, TSubSettings>> subSettingsProperty,
+            Action<ISettingsGroupBuilder<TSubSettings>>? configValues,
+            Action<MultiValuesEntry<TSettings, TSubSettings>>? config = null)
         {
-            var simpleAddSettingsEntry = CreateGroup(builder.Settings);
-            configValues?.Invoke(simpleAddSettingsEntry);
-            return builder.Add(new(property, simpleAddSettingsEntry.Build()), config);
+            var subSettings = subSettingsProperty.Compile(preferInterpretation: true)(builder.Settings)
+                ?? throw new InvalidOperationException("The sub-settings property returned null.");
+            var entries = CreateGroup(subSettings);
+            configValues?.Invoke(entries);
+            return builder.Add(new(subSettingsProperty, entries.Build()), config);
         }
 
-        public ISettingsGroupBuilder<TSettings> MultiValues(
-            string token,
-            string header,
-            string description,
-            Symbol icon,
-            Action<ISettingsGroupBuilder<TSettings>>? configValues,
-            Action<MultiValuesEntry<TSettings>>? config = null)
-        {
-            var simpleAddSettingsEntry = CreateGroup(builder.Settings);
-            configValues?.Invoke(simpleAddSettingsEntry);
-            return builder.Add(new(token, header, description, icon, simpleAddSettingsEntry.Build()), config);
-        }
+        public ISettingsGroupBuilder<TSettings> MultiValuesWithSwitch<TSubSettings>(
+            Expression<Func<TSettings, TSubSettings>> subSettingsProperty,
+            Expression<Func<TSubSettings, bool>> mainValueProperty,
+            Action<ISettingsGroupBuilder<TSubSettings>>? configValues,
+            Action<MultiValuesWithMainValueEntry<TSettings, TSubSettings, BoolSettingsEntry<TSubSettings>>>? config = null) =>
+            builder.MultiValuesWithMainValue(subSettingsProperty, mainValueProperty,
+                static (settings, property) => new BoolSettingsEntry<TSubSettings>(settings, property), configValues, config);
 
-        public ISettingsGroupBuilder<TSettings> MultiValues(
-            string header,
-            string description,
-            Symbol icon,
-            Action<ISettingsGroupBuilder<TSettings>>? configValues,
-            Action<MultiValuesEntry<TSettings>>? config = null) =>
-            builder.MultiValues(header, header, description, icon, configValues, config);
-
-        public ISettingsGroupBuilder<TSettings> MultiValuesWithSwitch(
-            Expression<Func<TSettings, bool>> property,
-            Action<ISettingsGroupBuilder<TSettings>>? configValues,
-            Action<MultiValuesWithMainValueEntry<TSettings, BoolSettingsEntry<TSettings>>>? config = null)
+        public ISettingsGroupBuilder<TSettings> MultiValuesWithMainValue<TSubSettings, TValue, TEntry>(
+            Expression<Func<TSettings, TSubSettings>> subSettingsProperty,
+            Expression<Func<TSubSettings, TValue>> mainValueProperty,
+            Func<TSubSettings, Expression<Func<TSubSettings, TValue>>, TEntry> mainValueFactory,
+            Action<ISettingsGroupBuilder<TSubSettings>>? configValues,
+            Action<MultiValuesWithMainValueEntry<TSettings, TSubSettings, TEntry>>? config = null)
+            where TEntry : IReadOnlySingleValueSettingsEntry
         {
-            var simpleAddSettingsEntry = CreateGroup(builder.Settings);
-            configValues?.Invoke(simpleAddSettingsEntry);
-            return builder.Add(new MultiValuesWithMainValueEntry<TSettings, BoolSettingsEntry<TSettings>>(
-                builder.Settings,
-                new BoolSettingsEntry<TSettings>(builder.Settings, property),
-                simpleAddSettingsEntry.Build()), config);
-        }
-
-        public ISettingsGroupBuilder<TSettings> MultiValuesWithMainValue<TMainValue>(
-            TMainValue mainValue,
-            Action<ISettingsGroupBuilder<TSettings>>? configValues,
-            Action<MultiValuesWithMainValueEntry<TSettings, TMainValue>>? config = null)
-            where TMainValue : IReadOnlySingleValueSettingsEntry
-        {
-            var simpleAddSettingsEntry = CreateGroup(builder.Settings);
-            configValues?.Invoke(simpleAddSettingsEntry);
-            return builder.Add(new MultiValuesWithMainValueEntry<TSettings, TMainValue>(builder.Settings, mainValue, simpleAddSettingsEntry.Build()), config);
+            // Resolve once so the main value and child entries always edit the same instance.
+            var subSettings = subSettingsProperty.Compile(preferInterpretation: true)(builder.Settings)
+                ?? throw new InvalidOperationException("The sub-settings property returned null.");
+            var entries = CreateGroup(subSettings);
+            configValues?.Invoke(entries);
+            return builder.Add(new MultiValuesWithMainValueEntry<TSettings, TSubSettings, TEntry>(
+                subSettings, subSettingsProperty, mainValueFactory(subSettings, mainValueProperty), entries.Build()), config);
         }
     }
 

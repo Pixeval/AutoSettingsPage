@@ -3,7 +3,7 @@ using FluentIcons.Common;
 
 namespace AutoSettingsPage.Models;
 
-public class MultiValuesEntry<TSettings> : SettingsEntryBase, IMultiValuesSettingsEntry
+public class MultiValuesEntry<TSettings, TSubSettings> : SettingsEntryBase, IMultiValuesSettingsEntry
 {
     public MultiValuesEntry(
         string token,
@@ -22,8 +22,8 @@ public class MultiValuesEntry<TSettings> : SettingsEntryBase, IMultiValuesSettin
         Entries = entries;
     }
 
-    public MultiValuesEntry(Expression<Func<TSettings, object>> property, IReadOnlyList<ISettingsEntry> entries)
-        : base(property)
+    public MultiValuesEntry(Expression<Func<TSettings, TSubSettings>> subSettingsProperty, IReadOnlyList<ISettingsEntry> entries)
+        : base(subSettingsProperty)
     {
         Entries = entries;
     }
